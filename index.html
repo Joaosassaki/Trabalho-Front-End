@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solda & Cia - Assistência Técnica</title>
+
+<style>
+/* ===== CONFIGURAÇÕES GERAIS ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background-color: #f4f4f4;
+  color: #222;
+  line-height: 1.6;
+}
+
+a { text-decoration: none; color: inherit; }
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+h2 {
+  font-size: 28px;
+  margin-bottom: 10px;
+  color: #1f2937;
+}
+
+section {
+  padding: 60px 0;
+}
+
+/* ===== CABEÇALHO / MENU ===== */
+header {
+  background-color: #1f2937;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.barra-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 70px;
+}
+
+.logo {
+  color: #fff;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.logo span { color: #f97316; }
+
+.menu {
+  list-style: none;
+  display: flex;
+  gap: 25px;
+}
+
+.menu a {
+  color: #ddd;
+  font-weight: bold;
+  padding: 8px;
+}
+
+.menu a:hover { color: #f97316; }
+
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 26px;
+  cursor: pointer;
+}
+
+@media (max-width: 700px) {
+  .menu {
+    display: none;
+    flex-direction: column;
+    background-color: #1f2937;
+    position: absolute;
+    top: 70px;
+    left: 0;
+    right: 0;
+    padding: 15px 20px;
+  }
+  .menu.aberto { display: flex; }
+  .menu-toggle { display: block; }
+}
+
+/* ===== SEÇÃO INÍCIO ===== */
+#inicio {
+  background-color: #1f2937;
+  color: #fff;
+  text-align: center;
+  padding: 90px 20px;
+}
+
+#inicio h1 {
+  font-size: 36px;
+  margin-bottom: 15px;
+}
+
+#inicio p {
+  font-size: 18px;
+  color: #cbd5e1;
+  max-width: 600px;
+  margin: 0 auto 25px;
+}
+
+.botao {
+  display: inline-block;
+  background-color: #f97316;
+  color: #fff;
+  padding: 14px 28px;
+  border-radius: 6px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  margin: 5px;
+}
+
+.botao:hover { background-color: #ea670c; }
+
+.botao-secundario {
+  background-color: transparent;
+  border: 2px solid #fff;
+  color: #fff;
+}
+
+/* ===== SEÇÃO SOBRE ===== */
+#sobre {
+  background-color: #fff;
+}
+
+.lista-valores {
+  list-style: none;
+  margin-top: 20px;
+}
+
+.lista-valores li {
+  background-color: #f4f4f4;
+  padding: 14px 18px;
+  margin-bottom: 10px;
+  border-left: 4px solid #f97316;
+  border-radius: 4px;
+}
+
+/* ===== SEÇÃO SERVIÇOS ===== */
+.filtros {
+  margin: 20px 0 30px;
+}
+
+.filtro-btn {
+  background-color: #fff;
+  border: 2px solid #1f2937;
+  color: #1f2937;
+  padding: 8px 18px;
+  margin-right: 10px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.filtro-btn.ativo {
+  background-color: #1f2937;
+  color: #fff;
+}
+
+.grade-servicos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.servico-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  cursor: pointer;
+}
+
+.servico-card h3 { color: #1f2937; margin-bottom: 8px; }
+
+.servico-card .preco {
+  color: #f97316;
+  font-weight: bold;
+  display: block;
+  margin-top: 10px;
+}
+
+.servico-detalhes {
+  display: none;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed #ccc;
+  font-size: 14px;
+  color: #555;
+}
+
+.servico-card.aberto .servico-detalhes {
+  display: block;
+}
+
+/* ===== SEÇÃO CONTATO ===== */
+#contato { background-color: #fff; }
+
+.campo { margin-bottom: 18px; }
+
+.campo label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.campo input,
+.campo select,
+.campo textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 15px;
+}
+
+.campo input.invalido,
+.campo select.invalido,
+.campo textarea.invalido {
+  border-color: #dc2626;
+}
+
+.mensagem-erro {
+  display: none;
+  color: #dc2626;
+  font-size: 13px;
+  margin-top: 5px;
+}
+
+.campo.com-erro .mensagem-erro { display: block; }
+
+#mensagem-sucesso {
+  display: none;
+  background-color: #dcfce7;
+  border: 1px solid #16a34a;
+  color: #15803d;
+  padding: 20px;
+  border-radius: 6px;
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+/* ===== RODAPÉ ===== */
+footer {
+  background-color: #1f2937;
+  color: #ccc;
+  text-align: center;
+  padding: 25px;
+  font-size: 14px;
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== CABEÇALHO ===================== -->
+<header>
+  <div class="container barra-nav">
+    <div class="logo">Solda<span>&</span>Cia</div>
+    <ul class="menu" id="menu">
+      <li><a href="#inicio">Início</a></li>
+      <li><a href="#sobre">Sobre</a></li>
+      <li><a href="#servicos">Serviços</a></li>
+      <li><a href="#contato">Contato</a></li>
+    </ul>
+    <button class="menu-toggle" id="botaoMenu">☰</button>
+  </div>
+</header>
+
+<!-- ===================== SEÇÃO INÍCIO ===================== -->
+<section id="inicio">
+  <h1>Conserto de celulares e computadores com garantia</h1>
+  <p>Diagnóstico transparente e peças testadas. Atendemos qualquer marca de celular ou computador.</p>
+  <a href="#servicos" class="botao">Ver serviços</a>
+  <a href="#contato" class="botao botao-secundario">Pedir orçamento</a>
+</section>
+
+<!-- ===================== SEÇÃO SOBRE ===================== -->
+<section id="sobre">
+  <div class="container">
+    <h2>Sobre nós</h2>
+    <p>A Solda&Cia é uma assistência técnica especializada em conserto de celulares e computadores.
+      Trabalhamos com peças testadas e explicamos cada defeito antes de iniciar o reparo.</p>
+
+    <ul class="lista-valores">
+      <li><strong>Diagnóstico transparente</strong> — você só paga depois de aprovar o orçamento.</li>
+      <li><strong>Garantia de 90 dias</strong> em todas as peças trocadas.</li>
+      <li><strong>Prazo rápido</strong> — a maioria dos reparos fica pronta em até 48 horas.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================== SEÇÃO SERVIÇOS ===================== -->
+<section id="servicos">
+  <div class="container">
+    <h2>Nossos serviços</h2>
+    <p>Clique em um serviço para ver mais detalhes.</p>
+
+    <div class="filtros">
+      <button class="filtro-btn ativo" data-filtro="todos">Todos</button>
+      <button class="filtro-btn" data-filtro="celular">Celulares</button>
+      <button class="filtro-btn" data-filtro="computador">Computadores</button>
+    </div>
+
+    <div class="grade-servicos" id="gradeServicos">
+
+      <div class="servico-card" data-categoria="celular">
+        <h3>Troca de tela</h3>
+        <p>Display trincado ou sem toque.</p>
+        <span class="preco">a partir de R$ 180</span>
+        <div class="servico-detalhes">Telas testadas com 90 dias de garantia. Pronto em 1 dia útil.</div>
+      </div>
+
+      <div class="servico-card" data-categoria="celular">
+        <h3>Troca de bateria</h3>
+        <p>Aparelho descarregando rápido demais.</p>
+        <span class="preco">a partir de R$ 120</span>
+        <div class="servico-detalhes">Testamos a bateria antiga e mostramos o relatório. Pronto em 1 dia útil.</div>
+      </div>
+
+      <div class="servico-card" data-categoria="celular">
+        <h3>Aparelho molhado</h3>
+        <p>Limpeza após contato com água.</p>
+        <span class="preco">a partir de R$ 90</span>
+        <div class="servico-detalhes">Limpeza anti-oxidação para evitar danos na placa. Pronto em 2 dias úteis.</div>
+      </div>
+
+      <div class="servico-card" data-categoria="computador">
+        <h3>Formatação completa</h3>
+        <p>Computador lento ou com vírus.</p>
+        <span class="preco">a partir de R$ 100</span>
+        <div class="servico-detalhes">Backup, formatação e instalação dos programas essenciais. Pronto em 1 dia útil.</div>
+      </div>
+
+      <div class="servico-card" data-categoria="computador">
+        <h3>Upgrade de SSD</h3>
+        <p>Deixe seu computador mais rápido.</p>
+        <span class="preco">a partir de R$ 250</span>
+        <div class="servico-detalhes">Trocamos o HD por SSD sem perder seus arquivos. Pronto em 1 dia útil.</div>
+      </div>
+
+      <div class="servico-card" data-categoria="computador">
+        <h3>Reparo de fonte</h3>
+        <p>Computador não liga.</p>
+        <span class="preco">sob orçamento</span>
+        <div class="servico-detalhes">Diagnóstico em bancada para identificar o componente com defeito.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SEÇÃO CONTATO ===================== -->
+<section id="contato">
+  <div class="container">
+    <h2>Entre em contato</h2>
+    <p>Preencha o formulário e te respondemos em até 24h.</p>
+
+    <form id="formContato" novalidate style="margin-top:25px; max-width:500px;">
+
+      <div class="campo" id="campoNome">
+        <label for="nome">Nome completo</label>
+        <input type="text" id="nome">
+        <p class="mensagem-erro">Digite seu nome completo.</p>
+      </div>
+
+      <div class="campo" id="campoEmail">
+        <label for="email">E-mail</label>
+        <input type="email" id="email">
+        <p class="mensagem-erro">Digite um e-mail válido.</p>
+      </div>
+
+      <div class="campo" id="campoTelefone">
+        <label for="telefone">Telefone</label>
+        <input type="tel" id="telefone" placeholder="(41) 99999-0000">
+        <p class="mensagem-erro">Digite um telefone válido.</p>
+      </div>
+
+      <div class="campo" id="campoTipo">
+        <label for="tipo">Tipo de aparelho</label>
+        <select id="tipo">
+          <option value="">Selecione...</option>
+          <option value="celular">Celular</option>
+          <option value="computador">Computador</option>
+        </select>
+        <p class="mensagem-erro">Selecione o tipo de aparelho.</p>
+      </div>
+
+      <div class="campo" id="campoMensagem">
+        <label for="mensagem">Descreva o problema</label>
+        <textarea id="mensagem" rows="4"></textarea>
+        <p class="mensagem-erro">Escreva pelo menos 10 caracteres.</p>
+      </div>
+
+      <button type="submit" class="botao" id="botaoEnviar" style="width:100%; background-color:#1f2937;">Enviar</button>
+    </form>
+
+    <div id="mensagemSucesso">
+      ✅ Solicitação enviada com sucesso! Em breve entraremos em contato.
+    </div>
+  </div>
+</section>
+
+<!-- ===================== RODAPÉ ===================== -->
+<footer>
+  <p>© 2026 Solda&Cia Assistência Técnica — projeto acadêmico fictício.</p>
+</footer>
+
+<!-- ===================== JAVASCRIPT ===================== -->
+<script>
+
+// ---------- 1. MENU MOBILE ----------
+const botaoMenu = document.getElementById("botaoMenu");
+const menu = document.getElementById("menu");
+
+botaoMenu.addEventListener("click", function () {
+  menu.classList.toggle("aberto");
+});
+
+// fecha o menu ao clicar em um link (mobile)
+const linksMenu = document.querySelectorAll(".menu a");
+linksMenu.forEach(function (link) {
+  link.addEventListener("click", function () {
+    menu.classList.remove("aberto");
+  });
+});
+
+
+// ---------- 2. FILTRO DE SERVIÇOS ----------
+const botoesFiltro = document.querySelectorAll(".filtro-btn");
+const cardsServico = document.querySelectorAll(".servico-card");
+
+botoesFiltro.forEach(function (botao) {
+  botao.addEventListener("click", function () {
+    const categoria = botao.getAttribute("data-filtro");
+
+    // marca o botão clicado como ativo
+    botoesFiltro.forEach(function (b) { b.classList.remove("ativo"); });
+    botao.classList.add("ativo");
+
+    // mostra ou esconde os cards de acordo com a categoria
+    cardsServico.forEach(function (card) {
+      if (categoria === "todos" || card.getAttribute("data-categoria") === categoria) {
+        card.style.display = "block";
+      } else {
+        card.style.display = "none";
+      }
+    });
+  });
+});
+
+// expande/recolhe os detalhes do serviço ao clicar no card
+cardsServico.forEach(function (card) {
+  card.addEventListener("click", function () {
+    card.classList.toggle("aberto");
+  });
+});
+
+
+// ---------- 3. VALIDAÇÃO DO FORMULÁRIO ----------
+const formContato = document.getElementById("formContato");
+const mensagemSucesso = document.getElementById("mensagemSucesso");
+const botaoEnviar = document.getElementById("botaoEnviar");
+
+function validarCampo(id, condicaoValida) {
+  const input = document.getElementById(id);
+  const campo = document.getElementById("campo" + id.charAt(0).toUpperCase() + id.slice(1));
+
+  if (condicaoValida) {
+    campo.classList.remove("com-erro");
+    input.classList.remove("invalido");
+    return true;
+  } else {
+    campo.classList.add("com-erro");
+    input.classList.add("invalido");
+    return false;
+  }
+}
+
+formContato.addEventListener("submit", function (evento) {
+  evento.preventDefault();
+
+  const nome = document.getElementById("nome").value;
+  const email = document.getElementById("email").value;
+  const telefone = document.getElementById("telefone").value;
+  const tipo = document.getElementById("tipo").value;
+  const mensagem = document.getElementById("mensagem").value;
+
+  // regras simples de validação
+  const nomeValido = validarCampo("nome", nome.trim().length >= 3);
+  const emailValido = validarCampo("email", /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email));
+  const telefoneValido = validarCampo("telefone", telefone.trim().length >= 8);
+  const tipoValido = validarCampo("tipo", tipo !== "");
+  const mensagemValida = validarCampo("mensagem", mensagem.trim().length >= 10);
+
+  const formularioValido = nomeValido && emailValido && telefoneValido && tipoValido && mensagemValida;
+
+  if (!formularioValido) {
+    return; // se algum campo estiver errado, não envia
+  }
+
+  // ---------- 4. SIMULAÇÃO DE ENVIO PARA O BANCO DE DADOS ----------
+  botaoEnviar.disabled = true;
+  botaoEnviar.textContent = "Enviando...";
+
+  // simula uma chamada assíncrona (ex: salvar em um banco de dados)
+  setTimeout(function () {
+    console.log("Dados enviados (simulação):", { nome, email, telefone, tipo, mensagem });
+
+    formContato.reset();
+    formContato.style.display = "none";
+    mensagemSucesso.style.display = "block";
+
+    botaoEnviar.disabled = false;
+    botaoEnviar.textContent = "Enviar";
+  }, 1200);
+});
+
+</script>
+</body>
+</html>
