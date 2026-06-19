@@ -35,7 +35,7 @@ Criar um site para uma assistência técnica especializada em celulares e comput
 ## Links
 
 **Site publicado:**
-(Adicionar link do GitHub Pages)
+https://joaosassaki.github.io/Trabalho-Front-End/
 
 **Repositório:**
 (Adicionar link do GitHub)
